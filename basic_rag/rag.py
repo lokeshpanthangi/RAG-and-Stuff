@@ -25,8 +25,11 @@ Answer the question based on the context provided.""")
 
 chain = prompt | model | parser
 
+
+
+
 def query_index(query: str):
-    docs = vector_store.similarity_search(query, k=3)
+    docs = vector_store.similarity_search(query, k=10)
     response = chain.invoke({"context": docs, "question": query})
     return response
 
