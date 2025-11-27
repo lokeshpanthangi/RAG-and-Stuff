@@ -1,17 +1,11 @@
 from fastapi import FastAPI
 from basic_rag.rag import query_index, upload_file
 from rag_text_tables.rag import upload_file2
+from rag_text_tables_images.rag import upload_file_multimodal
 from fastapi import File, UploadFile
 
 
 app = FastAPI()
-
-
-
-@app.post("/uploadfile/")
-async def upload(file: UploadFile = File(...)):
-    upload_file(file)
-    return {"filename": file.filename, "status": "uploaded"}
 
 
 @app.get("/query/")
@@ -20,7 +14,20 @@ async def query(question: str):
     return {"question": question, "answer": answer}
 
 
+@app.post("/uploadfile/")
+async def upload(file: UploadFile = File(...)):
+    upload_file(file)
+    return {"filename": file.filename, "status": "uploaded"}
+
+
 @app.post("/uploadfile_with_tables/")
 async def upload(file: UploadFile = File(...)):
     upload_file2(file)
     return {"filename": file.filename, "status": "uploaded"}
+
+
+@app.post("/uploadfile_multimodal/")
+async def upload_multimodal(file: UploadFile = File(...)):
+    upload_file_multimodal(file)
+    return {"filename": file.filename, "status": "uploaded"}
+

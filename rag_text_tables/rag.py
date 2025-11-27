@@ -8,9 +8,8 @@ from langchain_core.documents import Document
 
 
 def upload_file2(file: UploadFile = File(...)):
-    full_text_content = ""
     documents_to_add = []
-    
+    text = ""
     with fitz.open(stream=file.file.read(), filetype="pdf") as pdf:
         for page in pdf:
 
@@ -36,14 +35,12 @@ def upload_file2(file: UploadFile = File(...)):
                         doc = Document(page_content=final_text, metadata={"source": file.filename, "type": "table", "page": page.number})
                         documents_to_add.append(doc)
 
-            text = page.get_text()
-            full_text_content += text
+            text += page.get_text()
 
-    text_chunks = text_splitter.split_text(full_text_content)
+    text_chunks = text_splitter.split_text(text)
+    print(text_chunks)
     text_documents = [Document(page_content=t, metadata={"source": file.filename, "type": "text"}) for t in text_chunks]
-    
     all_documents = documents_to_add + text_documents
-    
     vector_store.add_documents(all_documents)
     
     file.file.close()
