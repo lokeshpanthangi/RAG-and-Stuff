@@ -5,10 +5,6 @@ from langchain_core.documents import Document
 from config import model, text_splitter, vector_store, parser
 
 
-
-
-
-
 # Prompt Template
 
 prompt = PromptTemplate(
@@ -20,12 +16,9 @@ this is the Question: {question}
 Answer the question based on the context provided.""")
 
 
-
 # Chain 
 
 chain = prompt | model | parser
-
-
 
 
 def query_index(query: str):
