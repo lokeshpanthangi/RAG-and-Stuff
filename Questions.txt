@@ -1,0 +1,90 @@
+RAG & LLM Engineering Questions They Will 100% Ask
+
+1. "Design a RAG pipeline for heterogeneous data (PDF, tables, DB) for a defence/maritime domain."
+They expect you to cover: chunking, embeddings, pgvector/FAISS, hybrid search, re-ranking, evaluation (precision@k, hallucination checks).
+
+2. "How do you avoid hallucinations in RAG?"
+They want: citations, retrieval filters, re-rankers, guardrails, policy prompts, structured output enforcement (Pydantic), source provenance.
+
+3. "Explain hybrid search (BM25 + vector) and when you'd use it."
+Tie to maritime data: sparse + dense = needed when queries are half structured, half natural language.
+
+4. "How would you build a secure on-prem chatbot with no cloud dependencies?"
+Hit: Docker, local vector DB, quantized models, caching, low GPU/RAM footprint.
+
+5. "How do you evaluate a RAG system?"
+Expect: precision@k, RAGAS, LLM-as-judge with safety constraints, groundedness scoring.
+
+Document AI / Data Structuring Questions
+
+6. "How do you extract tables from PDFs reliably?"
+Talk about: Camelot/Tabula, PDFPlumber, heuristic fallback, OCR fallback for scanned PDFs.
+
+7. "How do you handle OCR errors?"
+Talk about: Tesseract, PaddleOCR, layout analysis, spell correction, domain vocab boost.
+
+8. "Explain your approach to document deduplication and versioning."
+Hashing + metadata fingerprinting + embedding similarity.
+
+9. "How do you enrich metadata from unstructured documents?"
+NER, regular expressions, custom domain parsers.
+
+Vector DB / Retrieval Questions
+
+10. "Which vector DB would you choose between FAISS, pgvector, Milvus, Elastic and why?"
+Expect tradeoffs: on-prem, resource limits, scaling needs, hybrid search capabilities.
+
+11. "How do you design embeddings for multi-modal defence sensor data?"
+Expect you to mention: text → BGE/E5, tables → structured embeddings, geo-coordinates → custom features.
+
+Inference Optimisation (They care about this A LOT)
+
+12. "How do you reduce latency in LLM inference in an air-gapped environment?"
+Quantisation (int8/gguf), KV cache, batching, ONNX Runtime, smaller models.
+
+13. "Difference between dynamic batching, static batching, and speculative decoding?"
+
+Time-Series Modelling Questions (This JD includes it)
+
+14. "How would you detect anomalies in AIS/Radar time-series logs?"
+Isolation Forest + thresholds + LSTM + rolling window baselines.
+
+15. "What's your approach for time-series forecasting in low-GPU environments?"
+Lightweight models: ARIMA, ETS, Prophet, TCN-lite.
+
+MLOps & On-Prem
+
+16. "How do you deploy a model fully offline using Docker?"
+Explain: image build, dependencies, copying models, local inference server.
+
+17. "Explain MLflow vs DVC and when you'd use each."
+
+18. "How do you add observability to an LLM system?"
+Latency metrics, retrieval stats, token usage, drift detection.
+
+Coding / Pair Programming Topics They’ll Likely Use
+
+These are the actual code exercises these companies use.
+
+19. Parse a PDF text sample and extract structured metadata.
+Using Python.
+
+20. Implement a simple vector search over embeddings.
+Manual cosine similarity.
+
+21. Implement a chunking function with overlap.
+Given long text → return chunks.
+
+22. Write a small anomaly detection function for a numeric sequence.
+
+23. Build a minimal hybrid search: BM25 + vector score fusion.
+
+None of these require heavy DSA. Just solid engineering.
+
+Bonus: Behavioural / Ownership Questions
+
+24. "Tell me about the toughest data ingestion pipeline you designed."
+
+25. "How do you debug noisy or inconsistent retrieval?"
+
+26. "Describe one case where you improved latency drastically."
