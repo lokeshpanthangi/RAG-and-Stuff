@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from rag import query_index, upload_file
+from basic_rag.rag import query_index, upload_file
 from fastapi import File, UploadFile
 
 
