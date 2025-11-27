@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from reranker.query import query_cohere_index
 from basic_rag.rag import query_index, upload_file
 from rag_text_tables.rag import upload_file2
 from rag_text_tables_images.rag import upload_file_multimodal
@@ -12,6 +13,16 @@ app = FastAPI()
 async def query(question: str):
     answer = query_index(question)
     return {"question": question, "answer": answer}
+
+
+@app.get("/query_cohere_reranker/")
+async def query_cohere(question: str):
+    answer = query_cohere_index(question)
+    return {"question": question, "answer": answer}
+
+
+
+
 
 
 @app.post("/uploadfile/")
