@@ -3,6 +3,7 @@ from rag_with_ragas.rag import query_index_with_eval
 from reranker.query import query_cohere_index
 from basic_rag.rag import query_index, upload_file
 from rag_text_tables.rag import upload_file2
+# from rag_image_ocr.rag import upload_image_only
 from rag_text_tables_images.rag import upload_file_multimodal
 from fastapi import File, UploadFile
 
@@ -47,4 +48,10 @@ async def upload(file: UploadFile = File(...)):
 async def upload_multimodal(file: UploadFile = File(...)):
     upload_file_multimodal(file)
     return {"filename": file.filename, "status": "uploaded"}
+
+
+# @app.post("/uploadimage_only/")
+# async def upload_image(file: UploadFile = File(...)):
+#     await upload_image_only(file)
+#     return {"filename": file.filename, "status": "uploaded"}
 
