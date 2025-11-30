@@ -43,13 +43,13 @@ def query_index_with_eval(query: str):
     # 5. Run Evaluation (Reference-Free)
     # Note: We omit 'context_recall' because it needs ground truth
 
-    context_recall = LLMContextPrecisionWithoutReference()
+    context_precision = LLMContextPrecisionWithoutReference()
     results = evaluate(
         dataset=dataset, 
         metrics=[
             faithfulness, 
             answer_relevancy,
-            context_recall
+            context_precision
         ],
         llm=model,
         embeddings=embeddings

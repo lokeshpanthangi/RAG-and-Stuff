@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Blog App</title>
+</head>
+<body>
+    <h2>Create User</h2>
+    <form id="userForm">
+        <label>Email:</label><br>
+        <input type="email" name="email" required><br>
+        <label>Name:</label><br>
+        <input type="text" name="name" required><br>
+        <label>Gender:</label><br>
+        <input type="text" name="Gender"><br>
+        <button type="submit">Create User</button>
+    </form>
+    <hr>
+    <h2>All Blogs</h2>
+    <button onclick="loadBlogs()">See Blogs</button>
+    <ul id="blogsList"></ul>
+    <script>
+        document.getElementById('userForm').onsubmit = async function(e) {
+            e.preventDefault();
+            const form = e.target;
+            const data = {
+                email: form.email.value,
+                name: form.name.value,
+                Gender: form.Gender.value
+            };
+            await fetch('/createuser', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            });
+            alert('User created!');
+            form.reset();
+        };
+
+        async function loadBlogs() {
+            const res = await fetch('/getallblogs');
+            const blogs = await res.json();
+            const list = document.getElementById('blogsList');
+            list.innerHTML = '';
+            blogs.forEach(blog => {
+                const li = document.createElement('li');
+                li.textContent = blog.title + ' - ' + blog.content;
+                list.appendChild(li);
+            });
+        }
+    </script>
+</body>
+</html>

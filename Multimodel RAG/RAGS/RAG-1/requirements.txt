@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+langchain
+langchain_openai
+langchain_qdrant
+dotenv
+fitz
+pymupdf
