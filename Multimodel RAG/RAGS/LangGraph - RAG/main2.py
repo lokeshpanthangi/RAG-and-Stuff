@@ -29,9 +29,7 @@ parser = StrOutputParser()
 
 # -----------------
 # Nodes
-# -----------------
-def orchestrate(state: dict):
-    
+# ----------------    
 
 def retrieve(state: dict):
     docs = vectorstore.similarity_search(state["question"], k=3)

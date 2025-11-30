@@ -1,25 +1,44 @@
-# this is the same rag as main1.py but with paddleocr 
 import os
 import io
 from PIL import Image
+from paddleocr import PPStructureV3
 from fastapi import FastAPI, File, UploadFile
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from config import vector_store
+from pinecone import Pinecone
+from langchain_pinecone import PineconeVectorStore
+from dotenv import load_dotenv
+from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 
 
-
+load_dotenv()
 app = FastAPI()
 
 
-from paddleocr import PPStructureV3
+# LLM and Embeddings
 
+llm = ChatOpenAI(temperature=0.3, model_name="gpt-4o-mini")
+embeddings = OpenAIEmbeddings(model="text-embedding-3-small",dimensions=1024)
 
+# Pinecone Vector Store
+
+pinecone_api_key = os.getenv("PINECONE_API_KEY")
+pc = Pinecone(api_key=pinecone_api_key)
+index_name = "ragtest"
+index = pc.Index(index_name)
+vector_store = PineconeVectorStore(
+    index=index,
+    embedding=embeddings
+)
+
+# PaddleOCR for Document Extraction
 
 paddle_ocr = PPStructureV3(
     use_doc_orientation_classify=False,
     use_doc_unwarping=False
 )
+
+# Text Splitter
 
 splitter = RecursiveCharacterTextSplitter(
                 separators=["###", "\n\n", " "],
@@ -28,11 +47,19 @@ splitter = RecursiveCharacterTextSplitter(
             )
 
 
+
+
+# Helper Function to extract text, tables, and markdown from image bytes using PaddleOCR
+
+
 def extract_with_paddleocr(image_bytes):
     image = Image.open(io.BytesIO(image_bytes))
+    image.thumbnail((1800, 1800))
     temp_path = "temp_image.png"
     image.save(temp_path)
+    print("OCR start")
     output = paddle_ocr.predict(input=temp_path)
+    print("OCR done")
     extracted = {
         "text": [],
         "tables": [],
@@ -61,6 +88,10 @@ def extract_with_paddleocr(image_bytes):
 
 
 
+# API Endpoints
+
+
+@app.post("/upload-image/")
 async def upload_image_only(file: UploadFile = File(...)):
     try:
         file_bytes = await file.read()
@@ -104,3 +135,14 @@ async def upload_image_only(file: UploadFile = File(...)):
     except Exception as e:
         return {"error": str(e)}
     
+
+
+@app.get("/get-answer/")
+async def get_answer(query: str):
+    similar_docs = vector_store.similarity_search(query, k=3)
+    prompt = f"""You are an AI assistant that helps users by providing information based on the following context:\n\n{similar_docs}\n\nAnswer the following question:\n{query}"""
+    answer = llm.invoke(prompt).content
+    return {
+        "query": query,
+        "answer": answer,
+    }
