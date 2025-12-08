@@ -1,1 +1,10 @@
 .env
+__pycache__/
+__pycache__
+basic_rag/__pycache__/
+isolation/__pycache__/
+rag_image_ocr/__pycache__/
+rag_text_tables/__pycache__/
+rag_text_tables_images/__pycache__/
+rag_with_ragas/__pycache__/
+reranker/__pycache__/
